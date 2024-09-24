@@ -130,6 +130,12 @@ static void WarpToTruck(void)
     WarpIntoMap();
 }
 
+static void WarpToTest(void)
+{
+    SetWarpDestination(MAP_GROUP(TEST_MAP), MAP_NUM(TEST_MAP), WARP_ID_NONE, -1, -1);
+    WarpIntoMap();
+}
+
 void Sav2_ClearSetDefault(void)
 {
     ClearSav2();
@@ -192,7 +198,8 @@ void NewGameInitData(void)
     InitDewfordTrend();
     ResetFanClub();
     ResetLotteryCorner();
-    WarpToTruck();
+    // WarpToTruck();
+    WarpToTest();
     RunScriptImmediately(EventScript_ResetAllMapFlags);
     ResetMiniGamesRecords();
     InitUnionRoomChatRegisteredTexts();

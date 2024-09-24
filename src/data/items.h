@@ -14076,4 +14076,19 @@ const struct Item gItemsInfo[] =
         .iconPic = gItemIcon_PokeshiDoll,
         .iconPalette = gItemIconPalette_PokeshiDoll,
     },
+
+    [ITEM_PLOW_TOOL] =
+    {
+        .name = _("Plow Tool"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "Tool to set loamy\n"
+            "soil"),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_Rod,
+        .iconPic = gItemIcon_OldRod,
+        .iconPalette = gItemIconPalette_OldRod,
+    },
 };

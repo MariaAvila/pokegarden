@@ -55,6 +55,7 @@ static void Task_HiddenItemNearby(u8);
 static void Task_StandingOnHiddenItem(u8);
 static bool8 ItemfinderCheckForHiddenItems(const struct MapEvents *, u8);
 static u8 GetDirectionToHiddenItem(s16, s16);
+static bool8 InFarm(void);
 static void PlayerFaceHiddenItem(u8);
 static void CheckForHiddenItemsInMapConnection(u8);
 static void Task_OpenRegisteredPokeblockCase(u8);
@@ -308,6 +309,24 @@ static void ItemUseOnFieldCB_Rod(u8 taskId)
 {
     StartFishing(ItemId_GetSecondaryId(gSpecialVar_ItemId));
     DestroyTask(taskId);
+}
+
+static bool8 InFarm(void)
+{
+    if (gMapHeader.mapLayoutId == LAYOUT_TEST_MAP) //TODO: Set this to real farm map
+        return TRUE;
+    else
+        return FALSE;
+}
+
+void ItemUseOutOfBattle_Hoe(u8 taskId)
+{
+    if (InFarm() == TRUE)
+    {
+        // ITEM LOGIC HERE
+    }
+    else
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
 }
 
 void ItemUseOutOfBattle_Itemfinder(u8 var)

@@ -26,7 +26,7 @@ BerryTree_EventScript_CheckSoil::
 	specialvar VAR_RESULT, PlayerHasBerries
 	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_WantToPlant
 	specialvar VAR_RESULT, PlayerHasMulch
-	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_WantToMulch
+	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_WantToMulch @TODO: CHECK IF REDUNDANT
 	message BerryTree_Text_ItsSoftLoamySoil
 	waitmessage
 	waitbuttonpress
