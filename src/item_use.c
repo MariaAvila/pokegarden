@@ -1,4 +1,8 @@
 #include "global.h"
+#include "constants/layouts.h"
+#include "constants/metatile_behaviors.h"
+#include "constants/metatile_labels.h"
+#include "field_camera.h"
 #include "item_use.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -41,6 +45,7 @@
 #include "vs_seeker.h"
 #include "constants/event_bg.h"
 #include "constants/event_objects.h"
+#include "constants/trainer_types.h"
 #include "constants/item_effects.h"
 #include "constants/items.h"
 #include "constants/songs.h"
@@ -56,6 +61,9 @@ static void Task_StandingOnHiddenItem(u8);
 static bool8 ItemfinderCheckForHiddenItems(const struct MapEvents *, u8);
 static u8 GetDirectionToHiddenItem(s16, s16);
 static bool8 InFarm(void);
+static bool8 CanTill(s16 x, s16 y);
+static u8 SpawnBerryTreeAtPlot(u8 localId, s16 x, s16 y, u8 berryTreeId);
+static void ItemUseOnFieldCB_Hoe(u8);
 static void PlayerFaceHiddenItem(u8);
 static void CheckForHiddenItemsInMapConnection(u8);
 static void Task_OpenRegisteredPokeblockCase(u8);
@@ -313,20 +321,166 @@ static void ItemUseOnFieldCB_Rod(u8 taskId)
 
 static bool8 InFarm(void)
 {
-    if (gMapHeader.mapLayoutId == LAYOUT_TEST_MAP) //TODO: Set this to real farm map
-        return TRUE;
-    else
+    return gMapHeader.mapLayoutId == LAYOUT_GARDEN_MAP;
+}
+
+static bool8 CanTill(s16 x, s16 y)
+{
+    u8 i;
+    u8 activeCount = 0;
+    if (MapGridGetMetatileBehaviorAt(x, y) != MB_SAND)
         return FALSE;
+    for (i = 0; i < TILLED_PLOTS_COUNT; i++)
+    {
+        if (!gSaveBlock1Ptr->tilledPlots[i].active)
+            continue;
+        if (gSaveBlock1Ptr->tilledPlots[i].mapLayoutId != gMapHeader.mapLayoutId)
+            continue;
+        if (gSaveBlock1Ptr->tilledPlots[i].x == x &&
+            gSaveBlock1Ptr->tilledPlots[i].y == y)
+            return FALSE;
+        activeCount++;
+    }
+    return activeCount < 14;
 }
 
 void ItemUseOutOfBattle_Hoe(u8 taskId)
 {
+    s16 x, y;
     if (InFarm() == TRUE)
     {
-        // ITEM LOGIC HERE
+        GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
+        if (CanTill(x, y) == TRUE)
+        {
+            sItemUseOnFieldCB = ItemUseOnFieldCB_Hoe;
+            SetUpItemUseOnFieldCallback(taskId);
+        }
+        else
+            DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
     }
     else
         DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+}
+
+static u8 SpawnBerryTreeAtPlot(u8 localId, s16 x, s16 y, u8 berryTreeId)
+{
+    struct ObjectEventTemplate t;
+    u8 objectEventId;
+    t.localId = localId;
+    t.graphicsId = OBJ_EVENT_GFX_BERRY_TREE;
+    t.kind = OBJ_KIND_NORMAL;
+    t.x = x - MAP_OFFSET;
+    t.y = y - MAP_OFFSET;
+    t.elevation = 3;
+    t.movementType = MOVEMENT_TYPE_BERRY_TREE_GROWTH;
+    t.movementRangeX = 0;
+    t.movementRangeY = 0;
+    t.unused = 0;
+    t.trainerType = TRAINER_TYPE_NONE;
+    t.trainerRange_berryTreeId = berryTreeId;
+    t.script = BerryTreeScript;
+    t.flagId = 0;
+    t.filler = 0;
+    objectEventId = SpawnSpecialObjectEvent(&t);
+    return objectEventId;
+}
+
+static void ItemUseOnFieldCB_Hoe(u8 taskId)
+{
+    s16 x, y;
+    u8 i;
+    u8 berryTreeId;
+    u8 localId;
+    u8 objectEventId;
+    GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
+    for (i = 0; i < TILLED_PLOTS_COUNT; i++)
+    {
+        if (!gSaveBlock1Ptr->tilledPlots[i].active)
+            break;
+    }
+    if (i == TILLED_PLOTS_COUNT)
+    {
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+        return;
+    }
+    berryTreeId = 96 + i;
+    localId = TILLED_PLOT_LOCAL_ID_BASE + i;
+    objectEventId = SpawnBerryTreeAtPlot(localId, x, y, berryTreeId);
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+    {
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+        return;
+    }
+    MapGridSetMetatileIdAt(x, y, METATILE_GARDEN_TILLED_SOIL);
+    DrawWholeMapView();
+    gSaveBlock1Ptr->tilledPlots[i].x = x;
+    gSaveBlock1Ptr->tilledPlots[i].y = y;
+    gSaveBlock1Ptr->tilledPlots[i].mapLayoutId = gMapHeader.mapLayoutId;
+    gSaveBlock1Ptr->tilledPlots[i].berryTreeId = berryTreeId;
+    gSaveBlock1Ptr->tilledPlots[i].active = TRUE;
+    ScriptUnfreezeObjectEvents();
+    UnlockPlayerFieldControls();
+    DestroyTask(taskId);
+}
+
+u8 GetTilledPlotTemplateCount(void)
+{
+    u8 i;
+    u8 count = 0;
+    for (i = 0; i < TILLED_PLOTS_COUNT; i++)
+    {
+        if (gSaveBlock1Ptr->tilledPlots[i].active &&
+            gSaveBlock1Ptr->tilledPlots[i].mapLayoutId == gMapHeader.mapLayoutId)
+            count++;
+    }
+    return count;
+}
+
+void RestoreTilledPlots(void)
+{
+    u8 i;
+    u8 localId;
+    u8 staticCount = gMapHeader.events ? gMapHeader.events->objectEventCount : 0;
+    u8 slotIndex;
+    struct ObjectEventTemplate *t;
+
+    for (i = 0; i < TILLED_PLOTS_COUNT; i++)
+    {
+        if (!gSaveBlock1Ptr->tilledPlots[i].active)
+            continue;
+        if (gSaveBlock1Ptr->tilledPlots[i].mapLayoutId != gMapHeader.mapLayoutId)
+            continue;
+        localId = TILLED_PLOT_LOCAL_ID_BASE + i;
+        slotIndex = staticCount + i;
+        if (slotIndex >= OBJECT_EVENT_TEMPLATES_COUNT)
+            continue;
+        MapGridSetMetatileIdAt(
+            gSaveBlock1Ptr->tilledPlots[i].x,
+            gSaveBlock1Ptr->tilledPlots[i].y,
+            METATILE_GARDEN_TILLED_SOIL
+        );
+        // Register into the template array so TrySpawnObjectEvents handles spawning/despawning
+        t = &gSaveBlock1Ptr->objectEventTemplates[slotIndex];
+        t->localId = localId;
+        t->graphicsId = OBJ_EVENT_GFX_BERRY_TREE;
+        t->kind = OBJ_KIND_NORMAL;
+        t->x = gSaveBlock1Ptr->tilledPlots[i].x - MAP_OFFSET;
+        t->y = gSaveBlock1Ptr->tilledPlots[i].y - MAP_OFFSET;
+        t->elevation = 3;
+        t->movementType = MOVEMENT_TYPE_BERRY_TREE_GROWTH;
+        t->movementRangeX = 0;
+        t->movementRangeY = 0;
+        t->unused = 0;
+        t->trainerType = TRAINER_TYPE_NONE;
+        t->trainerRange_berryTreeId = gSaveBlock1Ptr->tilledPlots[i].berryTreeId;
+        t->script = BerryTreeScript;
+        t->flagId = 0;
+        t->filler = 0;
+        // Also spawn immediately - TrySpawnObjectEvents won't find these since
+        // they're past objectEventCount, so we spawn them directly here.
+        // GetAvailableObjectEventId will skip if already active (safe to call twice).
+        SpawnSpecialObjectEvent(t);
+    }
 }
 
 void ItemUseOutOfBattle_Itemfinder(u8 var)

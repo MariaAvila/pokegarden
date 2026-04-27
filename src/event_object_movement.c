@@ -18,6 +18,8 @@
 #include "field_player_avatar.h"
 #include "field_weather.h"
 #include "fieldmap.h"
+#include "item_use.h"
+#include "farm_mons.h"
 #include "follower_helper.h"
 #include "gpu_regs.h"
 #include "graphics.h"
@@ -2477,7 +2479,7 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
         else if (InTrainerHill())
             objectCount = HILL_TRAINERS_PER_FLOOR;
         else
-            objectCount = gMapHeader.events->objectEventCount;
+            objectCount = gMapHeader.events->objectEventCount + GetTilledPlotTemplateCount() + GetTotalFarmMonTemplateCount();
 
         for (i = 0; i < objectCount; i++)
         {

@@ -2224,6 +2224,21 @@ bool8 PlayerHasBerries(void)
     return IsBagPocketNonEmpty(POCKET_BERRIES);
 }
 
+u16 GetPartyMonHunger(void)
+{
+    return GetMonData(&gPlayerParty[0], MON_DATA_HUNGER, NULL);
+}
+
+void FeedPartyMonBerry(void)
+{
+    u16 hunger = GetMonData(&gPlayerParty[0], MON_DATA_HUNGER, NULL);
+    if (hunger > 0)
+    {
+        hunger--;
+        SetMonData(&gPlayerParty[0], MON_DATA_HUNGER, &hunger);
+    }
+}
+
 bool8 ObjectEventInteractionBerryHasWeed(void)
 {
     return gSaveBlock1Ptr->berryTrees[GetObjectEventBerryTreeId(gSelectedObjectEvent)].weeds;

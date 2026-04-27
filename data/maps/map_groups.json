@@ -93,7 +93,13 @@
     "Underwater_Route129",
     "Underwater_Route105",
     "Underwater_Route125",
-    "TestMap"
+    "TestMap",
+    "GardenMap",
+    "FarmHabitat_Water",
+    "FarmHabitat_Fire",
+    "FarmHabitat_Forest",
+    "FarmHabitat_Cave",
+    "FarmHabitat_Mystic"
   ],
   "gMapGroup_IndoorLittleroot": [
     "LittlerootTown_BrendansHouse_1F",

@@ -976,6 +976,33 @@ struct ExternalEventFlags
 
 } __attribute__((packed));/*size = 0x15*/
 
+#define TILLED_PLOTS_COUNT 32
+#define TILLED_PLOT_LOCAL_ID_BASE 2  // localIds 2..33 reserved for berry tree object events
+
+// Farm mon system
+#define FARM_MONS_PER_HABITAT   8
+#define FARM_HABITATS_COUNT     6   // main, water, fire, forest, cave, mystic
+#define FARM_MON_SLOTS         (FARM_MONS_PER_HABITAT * FARM_HABITATS_COUNT)  // 48
+#define FARM_MON_LOCAL_ID_BASE 34   // localIds 34..81 reserved for roaming farm mons
+
+struct TilledPlot {
+    s16 x;
+    s16 y;
+    u16 mapLayoutId;
+    u8  berryTreeId;
+    bool8 active;
+};
+
+struct FarmMon {
+    u8    boxNum;       // 0 = party, 1+ = PC box index
+    u8    boxPos;       // slot within party or box
+    u8    x;            // tile x (maps are < 256 tiles wide)
+    u8    y;            // tile y
+    u16   mapLayoutId;  // which habitat map this mon is placed in
+    bool8 active;
+    u8    padding;      // explicit pad to keep size at 8 bytes
+};
+
 struct SaveBlock1
 {
     /*0x00*/ struct Coords16 pos;
@@ -1087,6 +1114,8 @@ struct SaveBlock1
     /*0x3???*/ struct TrainerHillSave trainerHill;
 #endif //FREE_TRAINER_HILL
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
+    struct TilledPlot tilledPlots[TILLED_PLOTS_COUNT];
+    struct FarmMon farmMons[FARM_MON_SLOTS];
     // sizeof: 0x3???
 };
 

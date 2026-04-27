@@ -61,6 +61,13 @@ gSpecials::
 	def_special ObjectEventInteractionRemoveBerryTree
 	def_special ObjectEventInteractionWaterBerryTree
 	def_special PlayerHasBerries
+	def_special GetPartyMonHunger
+	def_special FeedPartyMonBerry
+	def_special GetFarmMonHunger
+	def_special FeedFarmMon
+	def_special RecallSelectedFarmMon
+	def_special PlacePartyMonOnFarm
+	def_special IsPartyMonOnFarm
 	def_special IsEnigmaBerryValid
 	def_special GetTrainerBattleMode
 	def_special ShowTrainerIntroSpeech

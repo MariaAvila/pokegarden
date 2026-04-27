@@ -4420,6 +4420,66 @@
       "secondary_tileset": "gTileset_Petalburg",
       "border_filepath": "data/layouts/TestMap/border.bin",
       "blockdata_filepath": "data/layouts/TestMap/map.bin"
+    },
+    {
+      "id": "LAYOUT_GARDEN_MAP",
+      "name": "GardenMap_Layout",
+      "width": 20,
+      "height": 15,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Unused1",
+      "border_filepath": "data/layouts/GardenMap/border.bin",
+      "blockdata_filepath": "data/layouts/GardenMap/map.bin"
+    },
+    {
+      "id": "LAYOUT_FARM_HABITAT_WATER",
+      "name": "FarmHabitat_Water_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Pacifidlog",
+      "border_filepath": "data/layouts/FarmHabitat_Water/border.bin",
+      "blockdata_filepath": "data/layouts/FarmHabitat_Water/map.bin"
+    },
+    {
+      "id": "LAYOUT_FARM_HABITAT_FIRE",
+      "name": "FarmHabitat_Fire_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Lavaridge",
+      "border_filepath": "data/layouts/FarmHabitat_Fire/border.bin",
+      "blockdata_filepath": "data/layouts/FarmHabitat_Fire/map.bin"
+    },
+    {
+      "id": "LAYOUT_FARM_HABITAT_FOREST",
+      "name": "FarmHabitat_Forest_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Fortree",
+      "border_filepath": "data/layouts/FarmHabitat_Forest/border.bin",
+      "blockdata_filepath": "data/layouts/FarmHabitat_Forest/map.bin"
+    },
+    {
+      "id": "LAYOUT_FARM_HABITAT_CAVE",
+      "name": "FarmHabitat_Cave_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MeteorFalls",
+      "border_filepath": "data/layouts/FarmHabitat_Cave/border.bin",
+      "blockdata_filepath": "data/layouts/FarmHabitat_Cave/map.bin"
+    },
+    {
+      "id": "LAYOUT_FARM_HABITAT_MYSTIC",
+      "name": "FarmHabitat_Mystic_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Facility",
+      "border_filepath": "data/layouts/FarmHabitat_Mystic/border.bin",
+      "blockdata_filepath": "data/layouts/FarmHabitat_Mystic/map.bin"
     }
   ]
 }

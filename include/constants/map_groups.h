@@ -64,6 +64,12 @@
 #define MAP_UNDERWATER_ROUTE105 (55 | (0 << 8))
 #define MAP_UNDERWATER_ROUTE125 (56 | (0 << 8))
 #define MAP_TEST_MAP            (57 | (0 << 8))
+#define MAP_GARDEN_MAP          (58 | (0 << 8))
+#define MAP_FARM_HABITAT_WATER  (59 | (0 << 8))
+#define MAP_FARM_HABITAT_FIRE   (60 | (0 << 8))
+#define MAP_FARM_HABITAT_FOREST (61 | (0 << 8))
+#define MAP_FARM_HABITAT_CAVE   (62 | (0 << 8))
+#define MAP_FARM_HABITAT_MYSTIC (63 | (0 << 8))
 
 // gMapGroup_IndoorLittleroot
 #define MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F    (0 | (1 << 8))

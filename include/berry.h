@@ -25,6 +25,8 @@ void ObjectEventInteractionPickBerryTree(void);
 void ObjectEventInteractionRemoveBerryTree(void);
 void ObjectEventInteractionApplyMulch(void);
 bool8 PlayerHasBerries(void);
+u16 GetPartyMonHunger(void);
+void FeedPartyMonBerry(void);
 void SetBerryTreesSeen(void);
 bool32 BerryTreeGrow(struct BerryTree *tree);
 

@@ -1076,3 +1076,15 @@ EventScript_VsSeekerChargingDone::
 	.include "data/text/birch_speech.inc"
 
 	.include "data/maps/TestMap/scripts.inc"
+
+	.include "data/maps/GardenMap/scripts.inc"
+
+	.include "data/maps/FarmHabitat_Water/scripts.inc"
+
+	.include "data/maps/FarmHabitat_Fire/scripts.inc"
+
+	.include "data/maps/FarmHabitat_Forest/scripts.inc"
+
+	.include "data/maps/FarmHabitat_Cave/scripts.inc"
+
+	.include "data/maps/FarmHabitat_Mystic/scripts.inc"

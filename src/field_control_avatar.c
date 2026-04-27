@@ -327,6 +327,9 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *position, u8
     gSpecialVar_LastTalked = gObjectEvents[objectEventId].localId;
     gSpecialVar_Facing = direction;
 
+    if (gObjectEvents[objectEventId].movementType == MOVEMENT_TYPE_BERRY_TREE_GROWTH)
+        return BerryTreeScript;
+
     if (InTrainerHill() == TRUE)
         script = GetTrainerHillTrainerScript();
     else

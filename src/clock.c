@@ -8,6 +8,7 @@
 #include "tv.h"
 #include "field_weather.h"
 #include "berry.h"
+#include "farm_mons.h"
 #include "main.h"
 #include "overworld.h"
 #include "wallclock.h"
@@ -70,7 +71,10 @@ static void UpdatePerMinute(struct Time *localTime)
     {
         if (minutes >= 0)
         {
+            minutes *= 60; // DEBUG: 1 real minute = 1 game hour
             BerryTreeTimeUpdate(minutes);
+            UpdateFarmMonHunger(minutes);
+            UpdateFarmMonHabitatBonuses(minutes);
             gSaveBlock2Ptr->lastBerryTreeUpdate = *localTime;
             FormChangeTimeUpdate();
         }

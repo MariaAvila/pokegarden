@@ -1,5 +1,6 @@
 #include "global.h"
 #include "overworld.h"
+#include "farm_mons.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
 #include "berry.h"
@@ -63,6 +64,7 @@
 #include "frontier_util.h"
 #include "constants/abilities.h"
 #include "constants/layouts.h"
+#include "item_use.h"
 #include "constants/map_types.h"
 #include "constants/region_map_sections.h"
 #include "constants/songs.h"
@@ -839,6 +841,8 @@ if (I_VS_SEEKER_CHARGING != 0)
     Overworld_ClearSavedMusic();
     RunOnTransitionMapScript();
     InitMap();
+    RestoreTilledPlots();
+    RestoreFarmMons();
     CopySecondaryTilesetToVramUsingHeap(gMapHeader.mapLayout);
     LoadSecondaryTilesetPalette(gMapHeader.mapLayout);
 
@@ -2226,6 +2230,8 @@ static void InitObjectEventsLocal(void)
     SetPlayerAvatarTransitionFlags(player->transitionFlags);
     ResetInitialPlayerAvatarState();
     TrySpawnObjectEvents(0, 0);
+    RestoreTilledPlots();
+    RestoreFarmMons();
     UpdateFollowingPokemon();
     TryRunOnWarpIntoMapScript();
 }

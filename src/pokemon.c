@@ -2513,6 +2513,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_HELD_ITEM:
             retVal = substruct0->heldItem;
             break;
+        case MON_DATA_HUNGER:
+            retVal = substruct0->hunger;
+            break;
         case MON_DATA_EXP:
             retVal = substruct0->experience;
             break;
@@ -3007,6 +3010,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         }
         case MON_DATA_HELD_ITEM:
             SET16(substruct0->heldItem);
+            break;
+        case MON_DATA_HUNGER:
+            SET16(substruct0->hunger);
             break;
         case MON_DATA_EXP:
             SET32(substruct0->experience);
